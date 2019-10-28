@@ -26,7 +26,7 @@ const TTSVoice = (props) => {
     }
   }
   const cancel = () => {
-    console.log('TTSVoice:PAUSE:', speechSynthesis)
+    console.log('TTSVoice:CANCEL:', speechSynthesis)
     if (window.speechSynthesis)
       window.speechSynthesis.cancel()
   }
