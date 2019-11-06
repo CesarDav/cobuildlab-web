@@ -17,11 +17,27 @@ import {
   CardContent,
   Content,
   Tag,
+  Control,
 } from 'bloomer'
 import { Icon } from 'react-icons-kit'
 import { clockO } from 'react-icons-kit/fa/clockO'
+import { ContainerSearch, Logo } from "./search/styles"
+import Search from "./search/index"
 
 class headerBlog extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: '',
+    }
+  }
+
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }
+
   render() {
     const { activeTab, siteTitle, posts } = this.props
     return (
@@ -46,8 +62,32 @@ class headerBlog extends React.Component {
             </Container>
           </HeroBody>
         </Hero>
+
         <section className="section-blog">
           <Container>
+            <Control>
+              {/* <Input
+                type="text"
+                name="title"
+                placeholder="Blog Search"
+                style={{ 'marginBottom': '35px', 'textAlign': 'center' }}
+                autoComplete="off"
+                value={this.state.title}
+                onChange={e => this.handleChange(e)}
+              /> */}
+              {/* <InstantSearch
+                apiKey='3352f131227a8daa73b9537609b5f93e'
+                appId='RITO3PAG6A'
+                indexName='instant_search'
+              >
+                <SearchBox 
+                  translations={{placeholder:'Search'}}
+                />
+              </InstantSearch> */}       
+
+              <Search collapse indices={{posts}}/>
+              
+            </Control>
             <Tabs isBoxed isFullWidth>
               <TabList>
                 <Tab>
@@ -73,57 +113,66 @@ class headerBlog extends React.Component {
             <Columns className="is-multiline">
               {posts ? (
                 posts.map(({ node }) => {
-                  const title =
-                    get(node, 'frontmatter.title') || node.fields.slug
-                  const image =
-                    get(node, 'frontmatter.image.publicURL') || defaultImg
-                  const splitTags = node.frontmatter.tags
-                    ? node.frontmatter.tags.split(', ')
-                    : undefined
-                  return (
-                    <Column key={node.fields.slug} isSize="1/3">
-                      <Link to={node.fields.slug}>
-                        <Card className="card-p">
-                          <CardContent
-                            className="card-post"
-                            style={{
-                              backgroundImage: `url(${image})`,
-                            }}
-                          />
-                          <Content className="title-post">
-                            <small>
-                              {' '}
-                              <Icon
-                                icon={clockO}
-                                style={{ paddingTop: 5 }}
-                              />{' '}
-                              {node.frontmatter.date}
-                            </small>
-                            <Subtitle hasTextColor="white">{title}</Subtitle>
-                          </Content>
-                          <Content className="tag-content">
-                            {splitTags && splitTags.length > 0
-                              ? splitTags.map((tag, index) => {
+                  // if (!cats || !filter) {
+                  //   return cats;
+                  // }
+                  // cats = [...cats.filter(item => item.origin.toUpperCase().indexOf(filter.origin.toUpperCase()) !== -1)];
+                  // if (node.frontmatter.title.toUpperCase().indexOf(this.state.title.toUpperCase()) !== -1) {
+                    console.log("node", node)
+                    const title =
+                      get(node, 'frontmatter.title') || node.fields.slug
+                    const image =
+                      get(node, 'frontmatter.image.publicURL') || defaultImg
+                    const splitTags = node.frontmatter.tags
+                      ? node.frontmatter.tags.split(', ')
+                      : undefined
+
+
+                    return (
+                      <Column key={node.fields.slug} isSize="1/3">
+                        <Link to={node.fields.slug}>
+                          <Card className="card-p">
+                            <CardContent
+                              className="card-post"
+                              style={{
+                                backgroundImage: `url(${image})`,
+                              }}
+                            />
+                            <Content className="title-post">
+                              <small>
+                                {' '}
+                                <Icon
+                                  icon={clockO}
+                                  style={{ paddingTop: 5 }}
+                                />{' '}
+                                {node.frontmatter.date}
+                              </small>
+                              <Subtitle hasTextColor="white">{title}</Subtitle>
+                            </Content>
+                            <Content className="tag-content">
+                              {splitTags && splitTags.length > 0
+                                ? splitTags.map((tag, index) => {
                                   return (
                                     <p className="p-content" key={index}>
                                       <Tag className="tag-category">{tag}</Tag>
                                     </p>
                                   )
                                 })
-                              : null}
-                          </Content>
-                        </Card>
-                      </Link>
-                    </Column>
-                  )
+                                : null}
+                            </Content>
+                          </Card>
+                        </Link>
+                      </Column>
+                    )
+                  // }
                 })
               ) : (
-                <Column hasTextAlign="centered">
-                  <Title isSize={3} tag="h3">
-                    There's no posts in this category
+                  <Column hasTextAlign="centered">
+                    <Title isSize={3} tag="h3">
+                      There's no posts in this category
                   </Title>
-                </Column>
-              )}
+                  </Column>
+                )}
             </Columns>
           </Container>
         </section>
