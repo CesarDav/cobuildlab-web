@@ -22,7 +22,10 @@
     "gatsby-plugin-feed": "^2.2.2",
     "gatsby-plugin-google-analytics": "^2.0.20",
     "gatsby-plugin-google-tagmanager": "^2.0.15",
+<<<<<<< HEAD
     "gatsby-plugin-mailchimp": "^5.1.2",
+=======
+>>>>>>> 17dadf406bf5238d76480cf3c7a506a4a15f2343
     "gatsby-plugin-manifest": "^2.1.1",
     "gatsby-plugin-offline": "^2.1.1",
     "gatsby-plugin-react-helmet": "^3.0.12",
@@ -62,7 +65,10 @@
     "react-youtube": "^7.9.0",
     "rehype-react": "^3.0.3",
     "styled-components": "^4.4.1",
+<<<<<<< HEAD
     "styled-icons": "^8.6.0",
+=======
+>>>>>>> 17dadf406bf5238d76480cf3c7a506a4a15f2343
     "typeface-merriweather": "0.0.43",
     "typeface-montserrat": "0.0.43",
     "validate.js": "^0.12.0"

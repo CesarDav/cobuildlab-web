@@ -1,7 +1,39 @@
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 })
+<<<<<<< HEAD
 const queries = require("./src/utils/algolia")
+=======
+const myQuery = `{
+  POSTS: allMarkdownRemark(
+    filter: { fileAbsolutePath: { regex: "/pages/blog/" } }
+  ) {
+    edges {
+      node {
+        objectID: id
+        frontmatter {
+          title
+          permalink
+          date(formatString: "MMM D, YYYY")
+          tags
+        }
+        excerpt(pruneLength: 5000)
+      }
+    }
+  }
+}`;
+
+const queries = [
+  {
+    query: myQuery,
+    transformer: ({ data }) => data.POSTS.edges.map(({ node }) => node), // optional
+    indexName: 'Posts', // overrides main index name, optional
+    settings: {
+      // optional, any index settings
+    },
+  },
+];
+>>>>>>> 17dadf406bf5238d76480cf3c7a506a4a15f2343
 
 module.exports = {
   siteMetadata: {
@@ -88,13 +120,13 @@ module.exports = {
     //     // pathToConfigModule: 'src/utils/typography',
     //   }
     // },
-    {
-      resolve: 'gatsby-plugin-mailchimp',
-      options: {
-        endpoint:
-          'https://4geeks.us5.list-manage.com/subscribe/post?u=05c88e36fa1e947ec0bf94453&amp;id=02c69b216a', // see instructions section below
-      },
-    },
+    // {
+    //   resolve: 'gatsby-plugin-mailchimp',
+    //   options: {
+    //     endpoint:
+    //       'https://4geeks.us5.list-manage.com/subscribe/post?u=05c88e36fa1e947ec0bf94453&amp;id=02c69b216a', // see instructions section below
+    //   },
+    // },
     `gatsby-remark-copy-linked-files`,
     `gatsby-plugin-sitemap`,
     `gatsby-plugin-feed`,
@@ -129,5 +161,15 @@ module.exports = {
         useAmpClientIdApi: true,
       },
     },
+    {
+      resolve: `gatsby-plugin-algolia`,
+      options: {
+        appId: process.env.GATSBY_ALGOLIA_APP_ID,
+        apiKey: process.env.ALGOLIA_ADMIN_KEY,
+        queries,
+        chunkSize: 10000, // default: 1000
+      },
+    },
+    `gatsby-plugin-styled-components`,
   ],
 }

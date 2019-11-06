@@ -18,7 +18,7 @@ import '../assets/css/index.css'
 // Import typefaces
 import 'typeface-montserrat'
 import 'typeface-merriweather'
-import addToMailchimp from 'gatsby-plugin-mailchimp'
+// import addToMailchimp from 'gatsby-plugin-mailchimp'
 
 import { Icon } from 'react-icons-kit'
 import { facebookOfficial } from 'react-icons-kit/fa/facebookOfficial'
@@ -58,17 +58,17 @@ class MyFooter extends React.Component {
       return
     }
 
-    addToMailchimp(this.state.email, {
-      FNAME: this.state.fullName,
-    }).then(data => {
-      if (data.result === 'success') {
-        navigate('/thanks-newsletter')
-      } else {
-        toast.error(data.msg, {
-          position: 'bottom-right',
-        })
-      }
-    })
+    // addToMailchimp(this.state.email, {
+    //   FNAME: this.state.fullName,
+    // }).then(data => {
+    //   if (data.result === 'success') {
+    //     navigate('/thanks-newsletter')
+    //   } else {
+    //     toast.error(data.msg, {
+    //       position: 'bottom-right',
+    //     })
+    //   }
+    // })
   }
 
   render() {
