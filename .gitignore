@@ -7,3 +7,4 @@ public
 .cache/
 yarn.lock
 .env
+.env.*
