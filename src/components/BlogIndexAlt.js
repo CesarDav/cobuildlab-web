@@ -20,6 +20,18 @@ import {
 } from 'bloomer'
 import { Icon } from 'react-icons-kit'
 import { clockO } from 'react-icons-kit/fa/clockO'
+import algoliasearch from 'algoliasearch/lite'
+import {
+  Configure,
+  InstantSearch,
+  SearchBox,
+  Hits
+} from 'react-instantsearch-dom'
+
+const searchClient = algoliasearch(
+  process.env.GATSBY_ALGOLIA_APP_ID,
+  process.env.GATSBY_ALGOLIA_SEARCH_KEY
+)
 
 class headerBlog extends React.Component {
   render() {
@@ -47,6 +59,15 @@ class headerBlog extends React.Component {
           </HeroBody>
         </Hero>
         <section className="section-blog">
+          <InstantSearch
+            indexName={process.env.GATSBY_ALGOLIA_INDEX_NAME}
+            searchClient={searchClient}
+          >
+            {/* Here's the change */}
+            <Configure distinct />
+            <SearchBox />
+            <Hits />
+          </InstantSearch>
           <Container>
             <Tabs isBoxed isFullWidth>
               <TabList>
@@ -104,12 +125,12 @@ class headerBlog extends React.Component {
                           <Content className="tag-content">
                             {splitTags && splitTags.length > 0
                               ? splitTags.map((tag, index) => {
-                                  return (
-                                    <p className="p-content" key={index}>
-                                      <Tag className="tag-category">{tag}</Tag>
-                                    </p>
-                                  )
-                                })
+                                return (
+                                  <p className="p-content" key={index}>
+                                    <Tag className="tag-category">{tag}</Tag>
+                                  </p>
+                                )
+                              })
                               : null}
                           </Content>
                         </Card>
@@ -118,12 +139,12 @@ class headerBlog extends React.Component {
                   )
                 })
               ) : (
-                <Column hasTextAlign="centered">
-                  <Title isSize={3} tag="h3">
-                    There's no posts in this category
+                  <Column hasTextAlign="centered">
+                    <Title isSize={3} tag="h3">
+                      There's no posts in this category
                   </Title>
-                </Column>
-              )}
+                  </Column>
+                )}
             </Columns>
           </Container>
         </section>
