@@ -13,6 +13,8 @@ const myQuery = `{
           permalink
           date(formatString: "MMM D, YYYY")
           tags
+          image
+          fields
         }
         excerpt(pruneLength: 5000)
       }
