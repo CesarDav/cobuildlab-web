@@ -10,7 +10,10 @@ const postQuery = `{
           permalink
           date(formatString: "MMM D, YYYY")
           tags
-          image
+          image{
+            publicURL
+            childImageSharp{}
+          }
           fields
         }
         excerpt(pruneLength: 5000)

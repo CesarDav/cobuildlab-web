@@ -1,6 +1,7 @@
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 })
+
 const myQuery = `{
   POSTS: allMarkdownRemark(
     filter: { fileAbsolutePath: { regex: "/pages/blog/" } }
@@ -13,7 +14,10 @@ const myQuery = `{
           permalink
           date(formatString: "MMM D, YYYY")
           tags
-          image
+          image{
+            publicURL
+            childImageSharp{}
+          }
           fields
         }
         excerpt(pruneLength: 5000)
