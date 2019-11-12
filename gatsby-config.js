@@ -16,9 +16,10 @@ const myQuery = `{
           tags
           image{
             publicURL
-            childImageSharp{}
-          }
-          fields
+            childImageSharp {
+              id
+            }
+          }          
         }
         excerpt(pruneLength: 5000)
       }

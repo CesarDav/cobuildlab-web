@@ -12,9 +12,10 @@ const postQuery = `{
           tags
           image{
             publicURL
-            childImageSharp{}
-          }
-          fields
+            childImageSharp {
+              id
+            }
+          }          
         }
         excerpt(pruneLength: 5000)
       }
