@@ -1,49 +1,59 @@
 ---
-title: How to Do Custom Functions
+title: Trigger and Webhooks Whit 8base
 date: 2019-26-16T01:00:00+00:00
 tags:
 template: development-post
 ---
 
+Continuing with the [app](connect-to-8base-and-make-a-query.md) in previous articles we are going to perform custom functions on the 8base server
+
 ## Custom Functions
 
-8base has custom features that allow you to extend your GraphQL API to connect with third party apis
+They are functions that run on the 8base server, they are useful to expand the functionalities of your 8base server.
 
-### 8base has 4 types of custom functions
+## 8base has 4 types of custom functions
 
 **Resolvers:** For extending your GraphQL API
 **Webhooks:** For RESTful endpoints (GET, POST, DELETE, etc...)
 **Triggers:** For functions requiring event-based execution
 **Tasks:** For invocable and scheduled (cron) functions
 
-On this occasion we will see that create a Webhooks type functions
+In this tutorial we will do 2 custom functions, trigger and webhooks
 
-A webhook allows you to call Custom Functions as regular RESTful endpoints. They can be very useful if you integrate with a 3rd party service that posts data back to your app using a specified URL. For example, enabling a payment processing service such as Stripe or Coinbase Commerce to notify your app of a successful payment by calling X URL.
+## Triggers
 
-<https://docs.8base.com/8base-console/custom-functions/webhooks>
+Trigger functions are functions that are executed when an event occurs,it can be before or after that event. To create the function you have to exist a project 8base, let's create the project with the following command.
 
-### 1. Create an account at 8base
-
-In a previous article we saw in depth everything necessary to create an account and configuration, you can review the article [here](connect-to-8base-and-make-a-query.md)
-
-### 2. Install the 8base CLI and Authenticate
-
-    npm install -g 8base-cli
-    8base login
-
-### 2. Creating the project and custom functions
-
-    8base init . --functions=webhooks:myCustomwebhooks
-
-### 3. Installing dependencies and configuring the workspace
-
-    npm install
-    8base configure
-
-### 4. Webhooks function
+    8base init . --functions=trigger:mytrigger --syntax:'js'
 
 ```javascript
-    /**
+module.exports = async (event, ctx) => {
+  console.log('EVENT', event)
+  console.log('CTX ', ctx)
+  const {
+    data: { email },
+  } = event
+
+  if (!email) {
+    throw new Error('Email does not exist!')
+  }
+
+  return {
+    data: { ...data },
+  }
+}
+```
+
+data is the object that is stored in the database
+
+## Webhooks
+
+A webhook allows you to call Custom Functions as regular RESTful endpoints. They can be very useful if you integrate with a 3rd party service that posts data back to your app using a specified URL.
+
+    8base generate webhook testwebhook -s='js'
+
+```javascript
+/**
  * Import any dependencies. All deployed functions can utilize any dependency
  * that was declared in the projects package.json file.
  */
@@ -53,7 +63,7 @@ import gql from 'graphql-tag';
  * Custom modules can get imported (and shared between functions)
  * by importing/requiring them using relative paths.
  */
-import { sendMail, GMAIL_USER } from '../../mailer';
+import { sendMail, GMAIL_USER } from './mailer';
 
 /**
  * Inside the webhook, API calls can be executed against your
@@ -141,3 +151,43 @@ module.exports = async (event, ctx) => {
   return responseBuilder(200, 'Success')
 };
 ```
+
+## Install nodemailer and create a file
+
+    npm i nodemailer
+
+```javascript
+const nodemailer = require('nodemailer')
+
+const GMAIL_USER = '8base.app.example@gmail.com'
+const GMAIL_PASSWORD = 'oBiiQicRJmUDMXY>VdtW^6M'
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: GMAIL_USER,
+    pass: GMAIL_PASSWORD,
+  },
+})
+
+const sendMail = async mailOptions =>
+  new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+
+module.exports = {
+  sendMail,
+  GMAIL_USER,
+}
+```
+
+## Deploy
+
+          npm install
+          8base deploy
